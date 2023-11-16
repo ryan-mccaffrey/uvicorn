@@ -8,7 +8,6 @@ import typing
 
 import click
 
-import uvicorn
 from uvicorn._types import ASGIApplication
 from uvicorn.config import (
     HTTP_PROTOCOLS,
@@ -28,6 +27,7 @@ from uvicorn.config import (
 )
 from uvicorn.server import Server, ServerState  # noqa: F401  # Used to be defined here.
 from uvicorn.supervisors import ChangeReload, Multiprocess
+import uvicorn
 
 LEVEL_CHOICES = click.Choice(list(LOG_LEVELS.keys()))
 HTTP_CHOICES = click.Choice(list(HTTP_PROTOCOLS.keys()))
@@ -518,6 +518,9 @@ def run(
 ) -> None:
     if app_dir is not None:
         sys.path.insert(0, app_dir)
+
+    logger = logging.getLogger("uvicorn.access")
+    logger.info(f"GOT THING WITH INTERVALS {ws_ping_interval} {ws_ping_timeout}")
 
     config = Config(
         app,
